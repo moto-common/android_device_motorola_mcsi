@@ -58,3 +58,14 @@ mount -o bind /mnt/phh/empty_dir /vendor/app/Honeywell_SoftBox
 
 # Redirect vendor props for QCOM hwcomposer
 setprop debug.phh.props.omposer-service vendor
+
+# Modify camera config for OPlus QCOM devices
+if [ "$(getprop ro.product.vendor.brand)" = "oplus" ] && [ "$(getprop ro.hardware)" = "qcom" ]; then
+    cp /odm/etc/camera/CameraHWConfiguration.config /mnt/phh
+    nr=$(awk '/SystemCamera.*=.*0;/{print NR}' /mnt/phh/CameraHWConfiguration.config)
+    sed -i "${nr}s/1;/0;/g" /mnt/phh/CameraHWConfiguration.config
+    ctxt="$(ls -lZ /odm/etc/camera/CameraHWConfiguration.config | grep -oE 'u:object_r:[^:]*:s0')"
+    chcon "${ctxt}" /mnt/phh/CameraHWConfiguration.config
+    mount -o bind /mnt/phh/CameraHWConfiguration.config /odm/etc/camera/CameraHWConfiguration.config
+    chmod 0644 /odm/etc/camera/CameraHWConfiguration.config
+fi
