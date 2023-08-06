@@ -1,6 +1,4 @@
-$(call inherit-product, vendor/lmodroid/build/target/product/lmodroid_gsi_arm64.mk)
-#$(error $(wildcard, vendor/*/build/target/product/*_gsi_arm64.mk))
-#$(call inherit-product, vendor/hardware_overlay/overlay.mk)
+$(call inherit-product, vendor/$(ROM_NAME)/build/target/product/$(ROM_NAME)_gsi_arm64.mk)
 
 PRODUCT_MODEL := MCSI GSI on ARM64
 
